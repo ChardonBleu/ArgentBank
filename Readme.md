@@ -8,9 +8,9 @@ I choose to use framework mode from React Router v7, including a default templat
 
 Clone the project in a directory.
 
-Back-end part is in Pojet12-Backend directory: [Readme.md](backend/README.md)
+Back-end part is in Backend directory: [Readme.md](backend/README.md)
 
-Back-end part is in Pojet12-Backend directory: [Readme.md](frontend/README.md)
+Front-end part is in Frontend directory: [Readme.md](frontend/README.md)
  
 
 ## Ressources:
