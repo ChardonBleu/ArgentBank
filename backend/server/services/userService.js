@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 module.exports.createUser = async serviceData => {
+  console.log('Requête reçue:', serviceData);
   try {
     const user = await User.findOne({ email: serviceData.email })
     if (user) {
@@ -19,6 +20,7 @@ module.exports.createUser = async serviceData => {
     })
 
     let result = await newUser.save()
+    console.log('Utilisateur créé:', result);
 
     return result
   } catch (error) {
@@ -89,6 +91,21 @@ module.exports.updateUserProfile = async serviceData => {
     }
 
     return user.toObject()
+  } catch (error) {
+    console.error('Error in userService.js', error)
+    throw new Error(error)
+  }
+}
+
+module.exports.getUserAll = async () => {
+  try {
+    const users = await User.find()
+
+    if (!users) {
+      throw new Error('Users not found!')
+    }
+
+    return users
   } catch (error) {
     console.error('Error in userService.js', error)
     throw new Error(error)

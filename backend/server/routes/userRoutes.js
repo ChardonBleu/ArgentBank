@@ -19,4 +19,9 @@ router.put(
   userController.updateUserProfile
 )
 
+router.get(
+  '/all',
+  userController.getUserAll
+)
+
 module.exports = router
