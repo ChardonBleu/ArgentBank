@@ -42,6 +42,10 @@ body {
   padding: 5px 20px;
 }
 
+.main-nav-links {
+  display: flex;
+}
+
 .main-nav a {
   font-weight: bold;
   color: #2c3e50;
@@ -180,7 +184,7 @@ body {
 }
 
 .sign-in-icon {
-  font-size: 5rem;
+  font-size: 2rem;
 }
 
 .input-remember {

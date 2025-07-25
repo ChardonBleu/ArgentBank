@@ -1,15 +1,14 @@
 import { Header } from "../components/Header";
 import { Footer } from "~/components/Footer";
+import { LoginForm } from "~/components/LoginForm";
 import type { ReactElement } from "react";
-import { Link } from "react-router";
 
 export default function SignIn(): ReactElement {
   return (
     <>
       <Header />
-      <main>
-        login
-        <Link to="/profile"> mon profil</Link>
+      <main className="main bg-dark">
+        <LoginForm />
       </main>
       <Footer />
     </>
