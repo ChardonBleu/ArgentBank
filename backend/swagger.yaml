@@ -8,6 +8,15 @@ host: localhost:3001
 basePath: /api/v1
 schemes:
   - http
+
+# Configuration de sécurité pour Swagger 2.0
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: "Enter JWT token in format: Bearer <token>"
+
 paths:
   /user/login:
     post:
@@ -33,6 +42,7 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+
   /user/signup:
     post:
       tags:
@@ -57,6 +67,7 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+
   /user/profile:
     post:
       security:
@@ -68,19 +79,23 @@ paths:
       parameters:
         - in: header
           name: Authorization
-          description: Attach Bearer JWT token
+          description: "Bearer JWT token (format: Bearer <token>)"
           required: true
+          type: string
       produces:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile retrieved successfully
           schema:
             $ref: '#/definitions/ApiResponse'
+        '401':
+          description: Unauthorized
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
+
     put:
       security:
         - Bearer: []
@@ -91,8 +106,9 @@ paths:
       parameters:
         - in: header
           name: Authorization
-          description: Attach Bearer JWT token
+          description: "Bearer JWT token (format: Bearer <token>)"
           required: true
+          type: string
         - in: body
           name: body
           description: Update user profile attributes
@@ -103,21 +119,41 @@ paths:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile updated successfully
           schema:
             $ref: '#/definitions/ApiResponse'
+        '401':
+          description: Unauthorized
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
-securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
+
+  /user/all:
+    get:
+      tags:
+        - User Module
+      summary: Get all users
+      description: API for getting all users
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Successfully
+          schema:
+            $ref: '#/definitions/UsersResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+
 definitions:
   User:
+    type: object
     properties:
+      _id: 
+        type: string
+        description: user id
       email:
         type: string
         description: user email
@@ -130,7 +166,9 @@ definitions:
       lastName:
         type: string
         description: user last name
+
   Login:
+    type: object
     properties:
       email:
         type: string
@@ -138,6 +176,7 @@ definitions:
       password:
         type: string
         description: user password
+
   ApiResponse:
     type: object
     properties:
@@ -152,11 +191,20 @@ definitions:
             type: string
           email:
             type: string
+
   LoginResponse:
     type: object
     properties:
-      token:
+      status:
+        type: integer
+      message:
         type: string
+      body:
+        type: object
+        properties:
+          token:
+            type: string
+
   UserProfile:
     type: object
     properties:
@@ -164,3 +212,17 @@ definitions:
         type: string
       lastName:
         type: string
+
+  UsersResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+
+
