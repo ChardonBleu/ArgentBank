@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router";
 
 function CurrentNavLink() {
-// TODO change location by logged state
+  // TODO change location by logged state
 
   const location = useLocation();
 
