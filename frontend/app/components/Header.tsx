@@ -1,9 +1,11 @@
-import { Link, useLocation } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAppSelector, useAppDispatch } from "../store/hooks";
+import { signOut } from "~/routes/signinSlice";
 
 function CurrentNavLink() {
-  // TODO change location by logged state
-
-  const location = useLocation();
+    const isLogged = useAppSelector(state => state.signInFlag.value)
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
   const loggedNavLinks = () => {
     return (
@@ -12,10 +14,16 @@ function CurrentNavLink() {
           <i className="fa fa-user-circle"></i>
           Name
         </Link>
-        <Link className="main-nav-item" to="/">
+        <button 
+          className="main-nav-item" 
+          onClick={() => {
+            dispatch(signOut())
+            navigate('/') 
+          }}
+        >
           <i className="fa fa-sign-out"></i>
           Sign Out
-        </Link>
+        </button>
       </div>
     );
   };
@@ -31,9 +39,7 @@ function CurrentNavLink() {
     );
   };
 
-  return ["/", "/login"].includes(location.pathname)
-    ? unloggedNavLinks()
-    : loggedNavLinks();
+  return isLogged ? loggedNavLinks() : unloggedNavLinks()
 }
 
 export function Header() {
@@ -49,5 +55,6 @@ export function Header() {
       </Link>
       <CurrentNavLink />
     </header>
+    
   );
 }

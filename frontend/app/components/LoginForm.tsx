@@ -1,6 +1,12 @@
 import type { ReactElement } from "react";
+import { useAppDispatch } from "../store/hooks";
+import { signIn } from "~/routes/signinSlice";
+import { useNavigate } from "react-router";
 
 export function LoginForm(): ReactElement {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
   return (
     <section className="sign-in-content">
       <i className="fa fa-user-circle sign-in-icon"></i>
@@ -18,7 +24,13 @@ export function LoginForm(): ReactElement {
           <input type="checkbox" id="remember-me" />
           <label htmlFor="remember-me">Remember me</label>
         </div>
-        <button className="sign-in-button">Sign In</button>
+        <button className="sign-in-button"
+          onClick={(event) => {
+            event.preventDefault()
+            dispatch(signIn())
+            navigate("/profile")
+          }}
+        >Sign In</button>
       </form>
     </section>
   );
