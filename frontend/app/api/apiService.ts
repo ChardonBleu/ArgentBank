@@ -1,16 +1,31 @@
 
 
-const API_BASE_URL = "http://localhost:3001"
+const API_BASE_URL = "http://localhost:3001/api/v1"
+
+interface RequestBody {
+  [key: string]: string;
+}
 
 class ApiService {
-    async request(endpoint: string, method: string, bodyContent = {}) {
+    async request(endpoint: string, method: string, bodyContent?: RequestBody, token?: string) {
         const url = `${API_BASE_URL}${endpoint}`;
 
-        const config = {
-            method: method,
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({bodyContent})
-        };
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json"
+    };
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    const config: RequestInit = {
+      method: method.toUpperCase(),
+      headers: headers
+    };
+
+    if (bodyContent && ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase())) {
+      config.body = JSON.stringify(bodyContent);
+    }
 
         const response = await fetch(url, config);
         if (!response.ok) {
@@ -20,13 +35,23 @@ class ApiService {
         return data;
     }
 
+    async getAllUsers() {
+        const users = await this.request(`/user/all`, 'GET');
+        return users;
+    }
+
     async getUserToken(userName: string, password: string) {
         const bodyContent = {
             email: userName,
             password: password
-        }
-        const token = await this.request(`/user/login`, 'POST', bodyContent);
-        return token;
+            }
+        const data = await this.request(`/user/login`, 'POST', bodyContent);
+        return data;
+    }
+
+    async getUserProfile(token: string,) {
+        const data = await this.request(`/user/profile`, 'POST', undefined, token);
+        return data;
     }
 
 }

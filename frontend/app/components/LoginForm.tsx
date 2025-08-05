@@ -1,17 +1,35 @@
 import type { FormEvent, ReactElement } from "react";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { userSignIn } from "~/routes/profileSlice";
+import { useAppDispatch } from "../store/hooks";
+import { userSignIn, userGetProfile } from "~/routes/profileSlice";
 import { useNavigate } from "react-router";
-import { selectUserFullName } from "~/store/selectors";
+import ApiService from "~/api/apiService";
 
 export function LoginForm(): ReactElement {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const userName = useAppSelector(selectUserFullName)
 
-  function handleSubmit(event:  FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    dispatch(userSignIn())
+    
+    const formData = new FormData(event.currentTarget);
+    const formEntries = Object.fromEntries(formData.entries());
+    const username = formEntries.username as string
+    const password = formEntries.password as string
+
+    const data = await ApiService.getUserToken(username, password)
+    const token = data.body.token
+    dispatch(userSignIn(token))
+    getProfile(token)
+  }
+
+  async function getProfile(token: string) {
+    const data = await ApiService.getUserProfile(token)
+    const action = {
+      email: data.body.email,
+      firstName: data.body.firstName,
+      lastName: data.body.lastName
+    }
+    dispatch(userGetProfile(action))
     navigate("/profile")
   }
 
@@ -21,21 +39,21 @@ export function LoginForm(): ReactElement {
       <h1>Sign In</h1>
       <form onSubmit={handleSubmit}>
         <div className="input-wrapper">
-          <label htmlFor="username">{userName}</label>
-          <input type="text" id="username" />
+          <label htmlFor="username">UserName</label>
+          <input type="text" id="username" name="username"/>
         </div>
         <div className="input-wrapper">
           <label htmlFor="password">Password</label>
-          <input type="password" id="password" />
+          <input type="password" id="password" name="password"/>
         </div>
         <div className="input-remember">
           <input type="checkbox" id="remember-me" />
           <label htmlFor="remember-me">Remember me</label>
         </div>
-        <input className="sign-in-button"
+        <button className="sign-in-button"
             type="submit"
             value="Sign In"
-        />
+        >Sign In</button>
       </form>
     </section>
   );

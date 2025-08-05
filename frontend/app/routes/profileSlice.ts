@@ -1,5 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from "@reduxjs/toolkit"
 
+
+interface UserProfile {
+    email: string,
+    firstName: string,
+    lastName: string
+
+}
 export interface userState {
     value: {
         email: string,
@@ -28,17 +36,21 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    userSignIn: state => {
+    userSignIn: (state, action: PayloadAction<string>) => {
         // Première requête pour obtenir le token à partir des données du formulaire
+        state.value.token = action.payload
 
-        // Deuxième requête pour récupérer les données du profil
-        state.value.firstName = "Fabienne"
-        state.value.lastName = "Rondi"
-        // Stocker le token dans le local storage ?
+        // Stocker le token dans le local storage
+        
 
         // Si authentification réussie:
-        state.value.isLogged = true
+        state.value.isLogged = state.value.token ? true : false
 
+    },
+    userGetProfile: (state, action: PayloadAction<UserProfile>)  => {
+        state.value.email = action.payload.email
+        state.value.firstName = action.payload.firstName
+        state.value.lastName = action.payload.lastName
     },
     userSignOut: state => {
         state.value = initialState.value
@@ -54,7 +66,7 @@ export const userSlice = createSlice({
 })
 
 
-export const { userSignIn , userUpdate, userSignOut } = userSlice.actions
+export const { userSignIn, userGetProfile, userSignOut, userUpdate } = userSlice.actions
 
 
 export const userReducer = userSlice.reducer
