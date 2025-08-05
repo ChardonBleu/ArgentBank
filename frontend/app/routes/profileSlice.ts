@@ -18,44 +18,32 @@ export interface userState {
     }
 }
 
-// Récupérer dans le local storage les valeurs du state si elles existent
-
-const initialState: userState = {
+const initialStateEmpty: userState = {
     value: {
-        email: "",
-        firstName: "",
-        lastName: "",
-        token: "",
-        isLogged: false
+            email: "",
+            firstName: "",
+            lastName: "",
+            token: "",
+            isLogged: false
+        }
     }
-}
-
-
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: initialStateEmpty,
   reducers: {
     userSignIn: (state, action: PayloadAction<string>) => {
-        // Première requête pour obtenir le token à partir des données du formulaire
         state.value.token = action.payload
-
-        // Stocker le token dans le local storage
-        
-
-        // Si authentification réussie:
-        state.value.isLogged = state.value.token ? true : false
-
     },
     userGetProfile: (state, action: PayloadAction<UserProfile>)  => {
         state.value.email = action.payload.email
         state.value.firstName = action.payload.firstName
         state.value.lastName = action.payload.lastName
+        state.value.isLogged = state.value.token ? true : false
     },
     userSignOut: state => {
-        state.value = initialState.value
-        // Vider le local storage ?
-
+        state.value = initialStateEmpty.value
+        localStorage.removeItem("token")
     },
     userUpdate: state => {
         console.log(state.value)

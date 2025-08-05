@@ -1,4 +1,4 @@
-import type { FormEvent, ReactElement } from "react";
+import { useEffect, type FormEvent, type ReactElement } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { userSignIn, userGetProfile } from "~/routes/profileSlice";
 import { useNavigate } from "react-router";
@@ -8,6 +8,21 @@ export function LoginForm(): ReactElement {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
+  useEffect(() => {
+      const username = localStorage.getItem("username")
+      const password = localStorage.getItem("password")
+      if (username && password) {
+        const userNameInput = document.getElementById("username")
+        userNameInput?.setAttribute("value", username)
+
+        const passwordInput = document.getElementById("password")
+        passwordInput?.setAttribute("value", password)
+      } else {
+        console.info("user non mémorisé")
+      }
+      
+  }, [])
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     
@@ -15,6 +30,14 @@ export function LoginForm(): ReactElement {
     const formEntries = Object.fromEntries(formData.entries());
     const username = formEntries.username as string
     const password = formEntries.password as string
+    console.log(formEntries)
+      if (formEntries.remember === "on") { 
+      localStorage.setItem("username", username)
+      localStorage.setItem("password", password)
+    } else {
+       localStorage.removeItem("username")
+       localStorage.removeItem("password")
+    }  
 
     const data = await ApiService.getUserToken(username, password)
     const token = data.body.token
@@ -47,7 +70,7 @@ export function LoginForm(): ReactElement {
           <input type="password" id="password" name="password"/>
         </div>
         <div className="input-remember">
-          <input type="checkbox" id="remember-me" />
+          <input type="checkbox" id="remember-me" name="remember"/>
           <label htmlFor="remember-me">Remember me</label>
         </div>
         <button className="sign-in-button"
