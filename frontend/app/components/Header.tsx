@@ -1,23 +1,25 @@
 import { Link, useNavigate } from "react-router";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
-import { signOut } from "~/routes/signinSlice";
+import { userSignOut } from "~/routes/profileSlice";
+import { selectUserFullName } from "~/store/selectors";
 
 function CurrentNavLink() {
-    const isLogged = useAppSelector(state => state.signInFlag.value)
+    const isLogged = useAppSelector(state => state.user.value.isLogged)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    const userName = useAppSelector(selectUserFullName)
 
   const loggedNavLinks = () => {
     return (
       <div className="main-nav-links">
         <Link className="main-nav-item" to="/profile">
           <i className="fa fa-user-circle"></i>
-          Name
+          {userName}
         </Link>
         <button 
           className="main-nav-item" 
           onClick={() => {
-            dispatch(signOut())
+            dispatch(userSignOut())
             navigate('/') 
           }}
         >

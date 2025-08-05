@@ -1,19 +1,27 @@
-import type { ReactElement } from "react";
-import { useAppDispatch } from "../store/hooks";
-import { signIn } from "~/routes/signinSlice";
+import type { FormEvent, ReactElement } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { userSignIn } from "~/routes/profileSlice";
 import { useNavigate } from "react-router";
+import { selectUserFullName } from "~/store/selectors";
 
 export function LoginForm(): ReactElement {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const userName = useAppSelector(selectUserFullName)
+
+  function handleSubmit(event:  FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    dispatch(userSignIn())
+    navigate("/profile")
+  }
 
   return (
     <section className="sign-in-content">
       <i className="fa fa-user-circle sign-in-icon"></i>
       <h1>Sign In</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="input-wrapper">
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username">{userName}</label>
           <input type="text" id="username" />
         </div>
         <div className="input-wrapper">
@@ -24,13 +32,10 @@ export function LoginForm(): ReactElement {
           <input type="checkbox" id="remember-me" />
           <label htmlFor="remember-me">Remember me</label>
         </div>
-        <button className="sign-in-button"
-          onClick={(event) => {
-            event.preventDefault()
-            dispatch(signIn())
-            navigate("/profile")
-          }}
-        >Sign In</button>
+        <input className="sign-in-button"
+            type="submit"
+            value="Sign In"
+        />
       </form>
     </section>
   );

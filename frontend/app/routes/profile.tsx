@@ -1,8 +1,12 @@
 import { Header } from "../components/Header";
 import { Footer } from "~/components/Footer";
 import type { ReactElement } from "react";
+import { useAppSelector } from "~/store/hooks";
+import { selectUserFullName } from "~/store/selectors";
 
 export default function Profile(): ReactElement {
+  const userName = useAppSelector(selectUserFullName)
+  
   return (
     <>
       <Header />
@@ -11,7 +15,7 @@ export default function Profile(): ReactElement {
           <h1>
             Welcome back
             <br />
-            Tony Jarvis!
+            {userName} !
           </h1>
           <button className="edit-button">Edit Name</button>
         </div>

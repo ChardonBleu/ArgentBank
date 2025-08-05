@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { signInReducer } from '../routes/signinSlice'
+import { userReducer } from '../routes/profileSlice'
 
 export const store =  configureStore({
   reducer: {
-    signInFlag: signInReducer
+    user: userReducer,
   }
 })
 
