@@ -4,10 +4,10 @@ import { userSignOut } from "~/routes/profileSlice";
 import { selectUserFullName } from "~/store/selectors";
 
 function CurrentNavLink() {
-    const isLogged = useAppSelector(state => state.user.value.isLogged)
-    const dispatch = useAppDispatch()
-    const navigate = useNavigate()
-    const userName = useAppSelector(selectUserFullName)
+  const isLogged = useAppSelector((state) => state.user.value.isLogged);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const userName = useAppSelector(selectUserFullName);
 
   const loggedNavLinks = () => {
     return (
@@ -16,11 +16,11 @@ function CurrentNavLink() {
           <i className="fa fa-user-circle"></i>
           {userName}
         </Link>
-        <button 
-          className="main-nav-item" 
+        <button
+          className="main-nav-item"
           onClick={() => {
-            dispatch(userSignOut())
-            navigate('/') 
+            dispatch(userSignOut());
+            navigate("/");
           }}
         >
           <i className="fa fa-sign-out"></i>
@@ -41,7 +41,7 @@ function CurrentNavLink() {
     );
   };
 
-  return isLogged ? loggedNavLinks() : unloggedNavLinks()
+  return isLogged ? loggedNavLinks() : unloggedNavLinks();
 }
 
 export function Header() {
@@ -57,6 +57,5 @@ export function Header() {
       </Link>
       <CurrentNavLink />
     </header>
-    
   );
 }

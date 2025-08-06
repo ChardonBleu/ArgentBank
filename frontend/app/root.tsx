@@ -9,8 +9,8 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import {store } from './store/store'
-import { Provider } from 'react-redux'
+import { store } from "./store/store";
+import { Provider } from "react-redux";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -54,7 +54,6 @@ export default function App() {
         <Outlet />
       </Provider>
     </>
-  
   );
 }
 
