@@ -7,9 +7,9 @@ import type { ReactElement } from "react";
 export function Loading(): ReactElement {
   return (
     <>
-      <section className="bg-dust rounded-md flex flex-col justify-center items-center mt-48">
-        <p className="font-base text-5xl">Loading ...</p>
-        <div className="loader mt-16"></div>
+      <section className="loader">
+        <p>Loading ...</p>
+        <div className="loader-anim"></div>
       </section>
     </>
   );
