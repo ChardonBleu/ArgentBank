@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
+import { Loading } from "./components/Loading";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -45,6 +46,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </body>
     </html>
   );
+}
+
+export function HydrateFallback() {
+  return <Loading />;
 }
 
 export default function App() {

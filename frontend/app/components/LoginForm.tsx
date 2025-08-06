@@ -17,8 +17,6 @@ export function LoginForm(): ReactElement {
 
       const passwordInput = document.getElementById("password");
       passwordInput?.setAttribute("value", password);
-    } else {
-      console.info("user non mémorisé");
     }
   }, []);
 
@@ -29,7 +27,7 @@ export function LoginForm(): ReactElement {
     const formEntries = Object.fromEntries(formData.entries());
     const username = formEntries.username as string;
     const password = formEntries.password as string;
-    console.log(formEntries);
+
     if (formEntries.remember && formEntries.remember === "on") {
       localStorage.setItem("username", username);
       localStorage.setItem("password", password);
