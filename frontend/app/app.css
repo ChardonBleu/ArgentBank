@@ -281,6 +281,45 @@ body {
   padding: 10px;
 }
 
+.edit-button_hide {
+  display: none;
+}
+
+.edit-form {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.edit-form_show {
+  display: flex;
+}
+
+.edit-form_items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.edit-form_items input {
+  font-size: 1rem;
+  padding: 10px;
+}
+
+.edit-form_items input::placeholder {
+  color: #e6e6e6;
+}
+
+.edit-form_items button {
+  font-size: 1rem;
+  width: 150px;
+  padding: 5px;
+}
+
 .header {
   color: #fff;
   margin-bottom: 2rem;
