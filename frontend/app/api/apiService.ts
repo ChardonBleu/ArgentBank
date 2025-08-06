@@ -59,6 +59,14 @@ class ApiService {
     const data = await this.request(`/user/profile`, "POST", undefined, token);
     return data;
   }
+
+  async updateUserProfile(token: string, firstName: string, lastName: string) {
+    const bodyContent = {
+      firstName: firstName,
+      lastName: lastName,
+    };
+    await this.request(`/user/profile`, "PUT", bodyContent, token);
+  }
 }
 
 export default new ApiService();

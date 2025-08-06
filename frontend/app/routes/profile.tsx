@@ -5,6 +5,7 @@ import type { ReactElement } from "react";
 import { useAppSelector } from "~/store/hooks";
 import { selectUserFullName } from "~/store/selectors";
 import { mockedAccounts } from "~/fixtures/mockedAccounts";
+import EditNameForm from "~/components/EditNameForm";
 
 export default function Profile(): ReactElement {
   const userName = useAppSelector(selectUserFullName);
@@ -19,7 +20,7 @@ export default function Profile(): ReactElement {
             <br />
             {userName} !
           </h1>
-          <button className="edit-button">Edit Name</button>
+          <EditNameForm />
         </div>
         <h2 className="sr-only">Accounts</h2>
         {mockedAccounts.map((account, index) => (

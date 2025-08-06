@@ -30,6 +30,16 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export function meta(): Array<object> {
+  return [
+    { title: "ArgentBank" },
+    {
+      name: "description",
+      content: "Welcome to ArgentBank !",
+    },
+  ];
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">

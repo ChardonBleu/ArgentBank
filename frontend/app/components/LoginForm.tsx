@@ -70,7 +70,7 @@ export function LoginForm(): ReactElement {
           <input type="checkbox" id="remember-me" name="remember" />
           <label htmlFor="remember-me">Remember me</label>
         </div>
-        <button className="sign-in-button" type="submit" value="Sign In">
+        <button className="sign-in-button" type="submit">
           Sign In
         </button>
       </form>
