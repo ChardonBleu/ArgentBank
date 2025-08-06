@@ -31,7 +31,7 @@ export function LoginForm(): ReactElement {
     const username = formEntries.username as string
     const password = formEntries.password as string
     console.log(formEntries)
-      if (formEntries.remember === "on") { 
+      if (formEntries.remember && formEntries.remember === "on") { 
       localStorage.setItem("username", username)
       localStorage.setItem("password", password)
     } else {

@@ -9,7 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import {store} from './store/store'
+import {store } from './store/store'
 import { Provider } from 'react-redux'
 
 export const links: Route.LinksFunction = () => [

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from "@reduxjs/toolkit"
+import type { PayloadAction, Reducer } from "@reduxjs/toolkit"
 
 
 interface UserProfile {
@@ -43,7 +43,6 @@ export const userSlice = createSlice({
     },
     userSignOut: state => {
         state.value = initialStateEmpty.value
-        localStorage.removeItem("token")
     },
     userUpdate: state => {
         console.log(state.value)
@@ -57,4 +56,4 @@ export const userSlice = createSlice({
 export const { userSignIn, userGetProfile, userSignOut, userUpdate } = userSlice.actions
 
 
-export const userReducer = userSlice.reducer
+export const userReducer = userSlice.reducer as Reducer<userState>
