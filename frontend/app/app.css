@@ -42,6 +42,10 @@ body {
   padding: 5px 20px;
 }
 
+.main-nav-links {
+  display: flex;
+}
+
 .main-nav a {
   font-weight: bold;
   color: #2c3e50;
@@ -59,6 +63,17 @@ body {
 .main-nav-item {
   text-decoration: none;
   margin-right: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 1rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .main-nav-item:hover {
@@ -167,7 +182,9 @@ body {
   margin-top: 1rem;
   border-color: #00bc77;
   background-color: #00bc77;
+  border-style: none;
   color: #fff;
+  text-decoration: underline;
 }
 
 .sign-in-content {
@@ -180,7 +197,7 @@ body {
 }
 
 .sign-in-icon {
-  font-size: 5rem;
+  font-size: 2rem;
 }
 
 .input-remember {
