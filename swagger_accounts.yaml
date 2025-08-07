@@ -1,0 +1,264 @@
+openapi: 3.0.4
+info:
+  title: Bank Argent API documentation
+  description: Contains all available API endpoints in this codebase
+  version: '1.0.0'
+  termsOfService: 'http://swagger.io/terms/'
+servers:
+  - url: http://localhost:3001/api/v1
+    description: Development server
+paths:
+  /user/accounts:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Accounts Module
+      summary: User Accounts API
+      description: API for fetching user's accounts
+      parameters:
+        - name: minDate
+          in: query
+          description: Minimum date that need to be considered for filter
+          required: false
+          schema:
+            type: string
+            example: "2024-01-01"
+        - name: maxDate
+          in: query
+          description: Maximum date that need to be considered for filter
+          required: false
+          schema:
+            type: string
+            example: "2024-12-31"
+      responses:
+        '200':
+          description: User's accounts retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountsResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/accounts/{accountId}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Accounts Module
+      summary: find Account by ID
+      description: API for fetching a single account
+      parameters:
+        - name: accountId
+          in: path
+          description: ID of the account that needs to be fetched
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+            example: "6881fefbcf58f8149b1b4bcb"
+            description: "MongoDB ObjectId"
+        - name: minDate
+          in: query
+          description: Minimum date that need to be considered for filter
+          required: false
+          schema:
+            type: string
+            example: "2024-01-01"
+        - name: maxDate
+          in: query
+          description: Maximum date that need to be considered for filter
+          required: false
+          schema:
+            type: string
+            example: "2024-12-31"
+      responses:
+        '200':
+          description: User's account retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleAccountResponse'
+        '400':
+          description: Invalid ID
+        '404':
+          description: Account not found
+        '500':
+          description: Internal Server Error
+  /user/transactions/{transactionId}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Accounts Module
+      summary: find Transaction by ID
+      description: API for fetching a single transactions
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID of the transaction that needs to be fetched
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+            example: "6881fefbcf58f8149b1b4bcb"
+            description: "MongoDB ObjectId"
+      responses:
+        '200':
+          description: transaction retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleTransactionResponse'
+        '400':
+          description: Invalid ID
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
+    patch:
+      security:
+        - BearerAuth: []
+      tags:
+        - Accounts Module
+      summary: update Transaction
+      description: API for updating category or notes of a transactions
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID of the transaction that needs to be updated
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+            example: "6881fefbcf58f8149b1b4bcb"
+            description: "MongoDB ObjectId"
+      requestBody:
+        description: Transaction update payload
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category:
+                  type: string
+                  enum:
+                    - food
+                    - shopping
+                    - credits
+                    - kids
+                    - health care
+                    - transport
+                  description: "Category of the transaction. Possible values: food, shopping, credits, kids, health care, transport"
+                notes:
+                  type: string
+                  description: "Additional notes for the transaction"
+            examples:
+              update_category:
+                summary: "Update transaction category"
+                value:
+                  category: "food"
+              update_notes:
+                summary: "Update transaction notes"
+                value:
+                  notes: "Restaurant lunch"
+              update_both:
+                summary: "Update both category and notes"
+                value:
+                  category: "shopping"
+                  notes: "Grocery shopping"
+      responses:
+        '200':
+          description: Transaction updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleTransactionResponse'
+        '400':
+          description: Invalid request data
+        '500':
+          description: Internal Server Error
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "JWT token for authentication. Format: Bearer {token}"
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+        amount:
+          type: number
+          format: double
+        balance:
+          type: string
+        type:
+          type: string
+        category:
+          type: string
+          enum:
+            - food
+            - shopping
+            - credits
+            - kids
+            - health care
+            - transport
+        notes:
+          type: string
+    Account:
+      type: object
+      properties:
+        accountId:
+          type: string
+        accountName:
+          type: string
+        accountAmount:
+          type: number
+          format: double
+        accountBalance:
+          type: string
+        accountTransactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+    AccountsResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            $ref: "#/components/schemas/Account"
+    SingleAccountResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          $ref: "#/components/schemas/Account"
+    SingleTransactionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          $ref: "#/components/schemas/Transaction"

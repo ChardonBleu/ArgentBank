@@ -8,15 +8,6 @@ host: localhost:3001
 basePath: /api/v1
 schemes:
   - http
-
-# Configuration de sécurité pour Swagger 2.0
-securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
-    description: "Enter JWT token in format: Bearer <token>"
-
 paths:
   /user/login:
     post:
@@ -42,7 +33,6 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
-
   /user/signup:
     post:
       tags:
@@ -62,12 +52,11 @@ paths:
         '200':
           description: Signup Successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/UserResponse'
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
-
   /user/profile:
     post:
       security:
@@ -79,36 +68,35 @@ paths:
       parameters:
         - in: header
           name: Authorization
-          description: "Bearer JWT token (format: Bearer <token>)"
+          description: Attach Bearer JWT token
           required: true
-          type: string
+          schema:
+            example: Bearer <JWT token>
       produces:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successfully
+          description: User profile retrieved successully
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '401':
-          description: Unauthorized
+            $ref: '#/definitions/ProfileResponse'
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
-
     put:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: User Profile API
+      summary: Update User Profile
       description: API for updating a user profile
       parameters:
         - in: header
           name: Authorization
-          description: "Bearer JWT token (format: Bearer <token>)"
+          description: Attach Bearer JWT token
           required: true
-          type: string
+          schema:
+            example: Bearer <JWT token>
         - in: body
           name: body
           description: Update user profile attributes
@@ -119,41 +107,193 @@ paths:
         - application/json
       responses:
         '200':
-          description: User profile updated successfully
+          description: User profile retrieved successully
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '401':
-          description: Unauthorized
+            $ref: '#/definitions/ProfileResponse'
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
-
-  /user/all:
+  /user/accounts:
     get:
+      security:
+        - Bearer: []
       tags:
-        - User Module
-      summary: Get all users
-      description: API for getting all users
+        - Accounts Module
+      summary: User Accounts API
+      description: API for fetching user's accounts
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            example: Bearer <JWT token>
+        - name: minDate
+          in: query
+          description: Minimum date that need to be considered for filter
+          require: false
+          schema:
+            type: string
+            example: aaaa-mm-jj
+        - name: maxDate
+          in: query
+          description: Maximum date that need to be considered for filter
+          require: false
+          schema:
+            type: string
+            example: aaaa-mm-jj
       produces:
         - application/json
       responses:
         '200':
-          description: Successfully
+          description: User's accounts retrieved successully
           schema:
-            $ref: '#/definitions/UsersResponse'
+            $ref: '#/definitions/AccountsResponse'
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
-
+  /user/accounts/{accountId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Accounts Module
+      summary: find Account by ID
+      description: API for fetching a single account 
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            example: Bearer <JWT token>
+        - name: accountId
+          in: paths
+          description: ID of the account that needs to be fetched
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+            example: "6881fefbcf58f8149b1b4bcb"
+            description: "MongoDB ObjectId"
+        - name: minDate
+          in: query
+          description: Minimum date that need to be considered for filter
+          require: false
+          schema:
+            type: string
+            example: aaaa-mm-jj
+        - name: maxDate
+          in: query
+          description: Maximum date that need to be considered for filter
+          require: false
+          schema:
+            type: string
+            example: aaaa-mm-jj
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User's account retrieved successully
+          schema:
+            $ref: '#/definitions/SingleAccountResponse'
+        '400':
+          description: Invalid ID
+        '404':
+          description: Account not found
+        '500':
+          description: Internal Server Error
+  /user/transactions/{transactionId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Accounts Module
+      summary: find Transaction by ID
+      description: API for fetching a single transactions 
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            example: Bearer <JWT token>
+        - name: transactionId
+          in: paths
+          description: ID of the transaction that needs to be fetched
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+            example: "6881fefbcf58f8149b1b4bcb"
+            description: "MongoDB ObjectId"
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: transaction retrieved successully
+          schema:
+            $ref: '#/definitions/SingleTransactionResponse'
+        '400':
+          description: Invalid ID
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
+    patch:
+      security:
+        - Bearer: []
+      tags:
+        - Accounts Module
+      summary: update Transaction
+      description: API for updating category or notes of a transactions 
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            example: Bearer <JWT token>
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              category:
+                type: string
+                enum:
+                  - food
+                  - shopping
+                  - credits
+                  - kids
+                  - health care
+                  - transport
+                example: food
+              notes:
+                type: string
+                example: "Updated notes"
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User's account retrieved successully
+          schema:
+            $ref: '#/definitions/SingleTransactionResponse'
+        '400':
+          description: Invalid request data
+        '500':
+          description: Internal Server Error
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
 definitions:
   User:
-    type: object
     properties:
-      _id: 
-        type: string
-        description: user id
       email:
         type: string
         description: user email
@@ -166,9 +306,7 @@ definitions:
       lastName:
         type: string
         description: user last name
-
   Login:
-    type: object
     properties:
       email:
         type: string
@@ -176,8 +314,19 @@ definitions:
       password:
         type: string
         description: user password
-
-  ApiResponse:
+  LoginResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          token:
+            type: string
+  UserResponse:
     type: object
     properties:
       status:
@@ -191,8 +340,17 @@ definitions:
             type: string
           email:
             type: string
-
-  LoginResponse:
+          password:
+            type: string
+          firstName:
+            type: string
+          lastName:
+            type: string
+          createdAt:
+            type: string
+          updatedAt:
+            type: string
+  ProfileResponse:
     type: object
     properties:
       status:
@@ -202,18 +360,59 @@ definitions:
       body:
         type: object
         properties:
-          token:
+          email:
             type: string
-
+          firstName:
+            type: string
+          lastName:
+            type: string
+          createdAt:
+            type: string
+          updatedAt:
+            type: string
+          id:
+            type: string
   UserProfile:
-    type: object
     properties:
       firstName:
         type: string
       lastName:
         type: string
-
-  UsersResponse:
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      amount:
+        type: number
+      balance:
+        type: string
+      type:
+        type: string
+      category:
+        type: string
+      notes:
+        type: string
+  Account:
+    type: object
+    properties:
+      accountId:
+        type: string
+      accountName: 
+        type: string
+      accountAmount: 
+        type: number
+      accountBalance:
+        type: string
+      accountTransactions:
+        type: array
+        items:
+          $ref: "#/definitions/Transaction"
+  AccountsResponse:
     type: object
     properties:
       status:
@@ -223,6 +422,23 @@ definitions:
       body:
         type: array
         items:
-          $ref: '#/definitions/User'
-
+          $ref: "#/definitions/Account"
+  SingleAccountResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        $ref: "#/definitions/Account"
+  SingleTransactionResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        $ref: "#/definitions/Transaction"
 
