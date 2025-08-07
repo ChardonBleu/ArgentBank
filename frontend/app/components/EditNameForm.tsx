@@ -53,8 +53,8 @@ export default function EditNameForm(): ReactElement {
       </button>
       <form className="edit-form" id="edit-form" onSubmit={handleSave}>
         <div className="edit-form_items">
-          <input name="firstName" placeholder={firstName} />
-          <input name="lastName" placeholder={lastName} />
+          <input name="firstName" placeholder={firstName} required={true} />
+          <input name="lastName" placeholder={lastName} required={true} />
         </div>
         <div className="edit-form_items">
           <button type="submit" className="edit-button">

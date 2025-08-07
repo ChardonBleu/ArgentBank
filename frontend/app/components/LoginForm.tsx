@@ -60,11 +60,16 @@ export function LoginForm(): ReactElement {
       <form onSubmit={handleSubmit}>
         <div className="input-wrapper">
           <label htmlFor="username">UserName</label>
-          <input type="text" id="username" name="username" />
+          <input type="text" id="username" name="username" required={true} />
         </div>
         <div className="input-wrapper">
           <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required={true}
+          />
         </div>
         <div className="input-remember">
           <input type="checkbox" id="remember-me" name="remember" />

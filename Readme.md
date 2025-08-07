@@ -13,7 +13,7 @@ Front-end part is in Frontend directory: [Readme.md](frontend/README.md)
 You can clone the whole project by doing:
 
 ```bash
-git clone --recurse-submodules https://github.com/ChardonBleu/ArgentBank
+git clone https://github.com/ChardonBleu/ArgentBank
 ```
 
 Then move to back-end directory to install backend packages:

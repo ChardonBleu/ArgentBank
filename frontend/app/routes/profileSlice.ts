@@ -11,7 +11,7 @@ export interface userState {
   };
 }
 
-const initialStateEmpty: userState = {
+const initialState: userState = {
   value: {
     email: "",
     firstName: "",
@@ -23,7 +23,7 @@ const initialStateEmpty: userState = {
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: initialStateEmpty,
+  initialState: initialState,
   reducers: {
     userSignIn: (state, action: PayloadAction<string>) => {
       state.value.token = action.payload;
@@ -32,10 +32,10 @@ export const userSlice = createSlice({
       state.value.email = action.payload.email;
       state.value.firstName = action.payload.firstName;
       state.value.lastName = action.payload.lastName;
-      state.value.isLogged = state.value.token ? true : false;
+      state.value.isLogged = action.payload.email ? true : false;
     },
     userSignOut: (state) => {
-      state.value = initialStateEmpty.value;
+      state.value = initialState.value;
     },
     userUpdate: (state, action) => {
       state.value.firstName = action.payload.firstName;

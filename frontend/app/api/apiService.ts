@@ -41,11 +41,6 @@ class ApiService {
     return data;
   }
 
-  async getAllUsers() {
-    const users = await this.request(`/user/all`, "GET");
-    return users;
-  }
-
   async getUserToken(userName: string, password: string) {
     const bodyContent = {
       email: userName,
