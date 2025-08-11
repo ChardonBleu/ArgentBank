@@ -10,24 +10,16 @@ export default function EditNameForm(): ReactElement {
 
   const dispatch = useAppDispatch();
 
-  function handleEditName(event: FormEvent) {
-    event.preventDefault();
-    const editNameButton = event.currentTarget;
-    editNameButton.classList.add("edit-button_hide");
+  function toggleForm() {
     const form = document.getElementById("edit-form");
-    form?.classList.add("edit-form_show");
-  }
-
-  function closeForm() {
-    const form = document.getElementById("edit-form");
-    form?.classList.remove("edit-form_show");
+    form?.classList.toggle("edit-form_show");
     const editNameButton = document.getElementById("edit-button");
-    editNameButton?.classList.remove("edit-button_hide");
+    editNameButton?.classList.toggle("edit-button_hide");
   }
 
   function handleCancel(event: FormEvent) {
     event.preventDefault();
-    closeForm();
+    toggleForm();
   }
 
   function handleSave(event: FormEvent<HTMLFormElement>) {
@@ -43,18 +35,18 @@ export default function EditNameForm(): ReactElement {
       lastName: lastName,
     };
     dispatch(userUpdate(action));
-    closeForm();
+    toggleForm();
   }
 
   return (
     <>
-      <button className="edit-button" id="edit-button" onClick={handleEditName}>
+      <button className="edit-button" id="edit-button" onClick={toggleForm}>
         Edit Name
       </button>
       <form className="edit-form" id="edit-form" onSubmit={handleSave}>
         <div className="edit-form_items">
-          <input name="firstName" placeholder={firstName} />
-          <input name="lastName" placeholder={lastName} />
+          <input name="firstName" placeholder={firstName} required={true} />
+          <input name="lastName" placeholder={lastName} required={true} />
         </div>
         <div className="edit-form_items">
           <button type="submit" className="edit-button">
