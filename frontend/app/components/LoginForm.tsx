@@ -10,13 +10,9 @@ export function LoginForm(): ReactElement {
 
   useEffect(() => {
     const username = localStorage.getItem("username");
-    const password = localStorage.getItem("password");
-    if (username && password) {
+    if (username) {
       const userNameInput = document.getElementById("username");
       userNameInput?.setAttribute("value", username);
-
-      const passwordInput = document.getElementById("password");
-      passwordInput?.setAttribute("value", password);
     }
   }, []);
 
@@ -30,10 +26,8 @@ export function LoginForm(): ReactElement {
 
     if (formEntries.remember && formEntries.remember === "on") {
       localStorage.setItem("username", username);
-      localStorage.setItem("password", password);
     } else {
       localStorage.removeItem("username");
-      localStorage.removeItem("password");
     }
 
     const data = await ApiService.getUserToken(username, password);
